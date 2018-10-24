@@ -1,4 +1,4 @@
-.quizContent {
+#quizContent {
     background-color: pink;
     border: 4px gold double;
     padding: 2%;
@@ -7,6 +7,10 @@
 
 .quizCard {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-align: center;
+}
+
+h1 {
     text-align: center;
 }
 
@@ -20,6 +24,11 @@ h2 {
     margin: auto;
 }
 
+.correct {
+   color: red;
+   visibility: hidden;
+}
+
 
 .btn {
     padding: 30px;
@@ -30,4 +39,14 @@ h2 {
 
 .btn:hover {
     box-shadow: 2px 2px 2px rgb(63, 62, 62);
+}
+
+#submitBtn {
+    padding: 25px;
+    margin: auto;
+    width: 100%;
+    background-color: rgb(80, 80, 80);
+    border-radius: 5px;
+    color: white;
+    font-size: 20px;
 }
