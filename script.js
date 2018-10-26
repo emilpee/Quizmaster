@@ -21,7 +21,6 @@ httpReq.onreadystatechange = function() {
             response.results.forEach(function(question, index) { // Skriver ut quizbehållare
                 var quiz = document.createElement("div");
                 correctAnswer = question.correct_answer; // Hämta de korrekta svaren och spara
-                quiz.classList.add("quizCard"); // Lägger till class för CSS
                 currentQuestion++; // Mätare för antalet frågor i quizet
                 quiz.id = index; // Anger id till quiz
                 content.appendChild(quiz);  // Det nyskapade elementet blir child till content
@@ -31,20 +30,18 @@ httpReq.onreadystatechange = function() {
                   <h2> ${question.question} </h2>
                   </div> 
                   `;
-                document.getElementById(quiz.id).innerHTML = quizContent; // Hämtar quizets id och skriver ut med egenskapen innerHTML
                 // Behåll knapparna synliga tills dess att de trycks på
                 trueButton.style.visibility = "visible";
                 falseButton.style.visibility = "visible";
+                document.getElementById(quiz.id).innerHTML = quizContent; // Hämtar quizets id och skriver ut med egenskapen innerHTML
             });
           }
-        } else {
-            console.log("Sorry, there was a problem when loading the page. Status code: " + httpReq.status);
-        }
-    };
-    httpReq.responseType = 'json';
-    httpReq.send();
+        } 
+  };
+  httpReq.responseType = 'json';
+  httpReq.send();
   });
-    
+
     content.addEventListener('click', function(e) { 
         if (e.target.id == "trueButton") { // Eventlistener för true-knappen
             if (correctAnswer == "True") {

@@ -15,7 +15,7 @@ body {
     background-color: rgb(228, 231, 178);
 }
 
-.quizCard {
+#quizContent {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     text-align: center;
     background-color: rgb(252, 156, 118);
