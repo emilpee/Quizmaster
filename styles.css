@@ -24,12 +24,6 @@ h2 {
     margin: auto;
 }
 
-.correct {
-   color: red;
-   visibility: hidden;
-}
-
-
 .btn {
     padding: 30px;
     border: 2px black solid;

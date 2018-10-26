@@ -7,73 +7,66 @@ var httpReq = new XMLHttpRequest();
 httpReq.onreadystatechange = function() {
     if (httpReq.readyState == 4) {
         if (httpReq.status == 200) {
-            console.log(httpReq.response);
             response = httpReq.response;
-            //content.innerHTML = response.results[5].question;
+            console.log(response);
             response.results.forEach(function(question, index) {
-                let quiz = document.createElement("div");
+                var quiz = document.createElement("div");
                 quiz.classList.add("quizCard"); 
                 quiz.id = index;
                 content.appendChild(quiz); 
                 var quizContent = ` 
                   <div id="quizContent">
                   <h2> ${question.question} </h2>
-                  <p class="correct"><strong>Correct answer: ${question.correct_answer} </strong></p>
-                  <input type="button" class="btn" value="True" id="trueButton">
-                  <input type="button" class="btn" value="False" id="falseButton">
-                </div> `;
-               document.getElementById(quiz.id).innerHTML = quizContent;
+                  <input type="button" value="True" class="btn" id="trueButton">
+                  <input type="button" value="False" class="btn" id="falseButton">
+                  </div> 
+                  `;
+                document.getElementById(quiz.id).innerHTML = quizContent;
             });
 
-    var btn = document.getElementsByClassName('btn'); 
-    var printCorrect = document.getElementsByTagName('p'); 
-    var trueButton = document.getElementById('trueButton');
-    // var falseButton = document.getElementById('falseButton');
-    quizContent = document.getElementById('quizContent');
     var numOfQuestions = response.results.length;
-    
-    var answers = []; // array som lagrar användarens svar
-    var currentQ = 0; // visar nuvarande fråga
+    var userCorrect = 0;
 
     // Lagra alla korrekta svar
-    var correctAnswer = response.results[currentQ].correct_answer;
+    var correctAnswer = [];
     for (var i = 0; i <= 9; i++) {
-      console.log(correctAnswer);
       correctAnswer = response.results[i].correct_answer;
-
-
-
-    if (btn === correctAnswer) {
-        alert("Correct!");
-        correctAnswer++;
-        currentQ++;
-    } else {
-        currentQ++;
+      console.log(correctAnswer);
     }
 
-    }
-
-    // if (true == correct_answer) {answers.push();} 
-    // else if (true == incorrect_answers) {do not push.}
     content.addEventListener('click', function(e) {
-        if (btn) {
-            for (var x = 0; x < printCorrect.length; x++) {
-              printCorrect[x].classList.remove('correct');
+        if (e.target.id == "trueButton") {
+            if (correctAnswer == "True") {
+                alert("Correct!");
+                userCorrect++;
+                e.target.parentNode.style.display = "none";
+            } else if (correctAnswer == "False") {
+                alert("Sorry, that's wrong!");
+                e.target.parentNode.style.display = "none";   
             }
-        } 
-    }); 
+          } 
+        else if (e.target.id == "falseButton") {
+            if (correctAnswer == "False") {
+                alert("Correct!");
+                userCorrect++;
+                e.target.parentNode.style.display = "none";
+            } else if (correctAnswer == "True") {
+                alert("Sorry, that's wrong!");
+                e.target.parentNode.style.display = "none";
+              }
+            }
+      });
 
     // Lägg till knapp som visar resultat
     content.appendChild(submitBtn);
     submitBtn.addEventListener('click', function() {
-        alert(correctAnswer + ' out of ' + numOfQuestions);
+        alert("Your result is: " + userCorrect + " out of " + numOfQuestions);
     });
-}
-}
+    }
+  }
 };
 
-
-httpReq.open('GET', 'https://opentdb.com/api.php?amount=10&category=12&difficulty=medium&type=boolean');
+httpReq.open('GET', 'https://opentdb.com/api.php?amount=10&category=12&difficulty=easy&type=boolean');
 httpReq.responseType = 'json';
 httpReq.send();
 console.log(httpReq);
