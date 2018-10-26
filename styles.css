@@ -5,6 +5,10 @@
     margin-top: 1.5%;
 }
 
+body {
+    background-color: rgb(228, 231, 178);
+}
+
 .quizCard {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     text-align: center;
@@ -20,7 +24,7 @@ h2 {
 }
 
 #content {
-    width: 60%;
+    width: 100%;
     margin: auto;
 }
 

@@ -1,8 +1,13 @@
 var response;
+var btn = document.getElementById('btn');
+var currentQuestion = 0;
+var correctAnswer;
+var userCorrect = 0;
 
-document.addEventListener('DOMContentLoaded', function() {
+btn.addEventListener("click", function() {
 var content = document.getElementById("content");
 var httpReq = new XMLHttpRequest();
+httpReq.open('GET', 'https://opentdb.com/api.php?amount=' + 1 + '&category=12&difficulty=easy&type=boolean');
   
 httpReq.onreadystatechange = function() {
     if (httpReq.readyState == 4) {
@@ -11,63 +16,58 @@ httpReq.onreadystatechange = function() {
             console.log(response);
             response.results.forEach(function(question, index) {
                 var quiz = document.createElement("div");
+                correctAnswer = question.correct_answer;
                 quiz.classList.add("quizCard"); 
+                currentQuestion++;
                 quiz.id = index;
                 content.appendChild(quiz); 
                 var quizContent = ` 
                   <div id="quizContent">
                   <h2> ${question.question} </h2>
-                  <input type="button" value="True" class="btn" id="trueButton">
-                  <input type="button" value="False" class="btn" id="falseButton">
                   </div> 
                   `;
                 document.getElementById(quiz.id).innerHTML = quizContent;
+                trueButton.style.visibility = "visible";
+                falseButton.style.visibility = "visible";
             });
+          }
+        }
+    };
+    httpReq.responseType = 'json';
+    httpReq.send();
+  });
 
-    var numOfQuestions = response.results.length;
-    var userCorrect = 0;
 
-    // Lagra alla korrekta svar
-    var correctAnswer = [];
-    for (var i = 0; i <= 9; i++) {
-      correctAnswer = response.results[i].correct_answer;
-      console.log(correctAnswer);
-    }
+    console.log(correctAnswer);
 
-    content.addEventListener('click', function(e) {
-        if (e.target.id == "trueButton") {
+    trueButton.addEventListener('click', function() {
             if (correctAnswer == "True") {
                 alert("Correct!");
+                console.log(userCorrect);
                 userCorrect++;
-                e.target.parentNode.style.display = "none";
-            } else if (correctAnswer == "False") {
+            } else {
                 alert("Sorry, that's wrong!");
-                e.target.parentNode.style.display = "none";   
             }
-          } 
-        else if (e.target.id == "falseButton") {
+            if (currentQuestion === 10) {
+                alert("Correct Answers: " + userCorrect + " out of " + currentQuestion);
+                location.reload();
+          }
+          trueButton.style.visibility = "hidden";
+          falseButton.style.visibility = "hidden";
+    }); 
+
+    falseButton.addEventListener('click', function() {
             if (correctAnswer == "False") {
                 alert("Correct!");
+                console.log(userCorrect);
                 userCorrect++;
-                e.target.parentNode.style.display = "none";
-            } else if (correctAnswer == "True") {
+            } else {
                 alert("Sorry, that's wrong!");
-                e.target.parentNode.style.display = "none";
               }
+            if (currentQuestion === 10) {
+                alert("Correct Answers: " + userCorrect + " out of " + currentQuestion);
+                location.reload();
             }
-      });
-
-    // Lägg till knapp som visar resultat
-    content.appendChild(submitBtn);
-    submitBtn.addEventListener('click', function() {
-        alert("Your result is: " + userCorrect + " out of " + numOfQuestions);
-    });
-    }
-  }
-};
-
-httpReq.open('GET', 'https://opentdb.com/api.php?amount=10&category=12&difficulty=easy&type=boolean');
-httpReq.responseType = 'json';
-httpReq.send();
-console.log(httpReq);
-});
+            trueButton.style.visibility = "hidden";
+            falseButton.style.visibility = "hidden";
+        });
