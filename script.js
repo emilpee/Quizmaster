@@ -3,6 +3,8 @@ var btn = document.getElementById('btn');
 var currentQuestion = 0;
 var correctAnswer;
 var userCorrect = 0;
+var trueButton = document.getElementById("trueButton");
+var falseButton = document.getElementById("falseButton");
 
 btn.addEventListener("click", function() {
 var content = document.getElementById("content");
@@ -40,7 +42,9 @@ httpReq.onreadystatechange = function() {
 
     console.log(correctAnswer);
 
-    trueButton.addEventListener('click', function() {
+    
+    content.addEventListener('click', function(e) {
+        if (e.target.id == "trueButton") {
             if (correctAnswer == "True") {
                 alert("Correct!");
                 console.log(userCorrect);
@@ -49,14 +53,15 @@ httpReq.onreadystatechange = function() {
                 alert("Sorry, that's wrong!");
             }
             if (currentQuestion === 10) {
-                alert("Correct Answers: " + userCorrect + " out of " + currentQuestion);
-                location.reload();
+                alert("Your result is: " + userCorrect + " out of " + currentQuestion);
+                content.innerHTML = "Thanks for taking my quiz!";
+                setInterval(function(){ location.reload(); }, 5000);
           }
           trueButton.style.visibility = "hidden";
           falseButton.style.visibility = "hidden";
-    }); 
+        }
 
-    falseButton.addEventListener('click', function() {
+    else if (e.target.id == "falseButton") {
             if (correctAnswer == "False") {
                 alert("Correct!");
                 console.log(userCorrect);
@@ -65,9 +70,11 @@ httpReq.onreadystatechange = function() {
                 alert("Sorry, that's wrong!");
               }
             if (currentQuestion === 10) {
-                alert("Correct Answers: " + userCorrect + " out of " + currentQuestion);
-                location.reload();
+                alert("Your result is: " + userCorrect + " out of " + currentQuestion);
+                content.innerHTML = "Thanks for taking my quiz!";
+                setInterval(function(){ location.reload(); }, 5000);
             }
             trueButton.style.visibility = "hidden";
             falseButton.style.visibility = "hidden";
-        });
+        }
+     });
