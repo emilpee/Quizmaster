@@ -64,3 +64,9 @@ h2 {
 .btn:hover, #btn:hover {
     box-shadow: 2px 2px 2px rgb(63, 62, 62);
 }
+
+#printAnswer {
+    position: relative;
+    top: 100px;
+    right: 200px;
+}

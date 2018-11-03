@@ -1,6 +1,9 @@
 var response;
 var btn = document.getElementById('btn');
 var currentQuestion = 0;
+var numOfQuestions = 10;
+var answeredQuestion = 0; // Variabel som mäter nuvarande fråga
+var printAnswer = document.getElementById("printAnswer");
 var correctAnswer; // Variabel som lagrar det korrekta svaret
 var userCorrect = 0; // Mäter användarens korrekta svar
 var trueButton = document.getElementById("trueButton");
@@ -9,8 +12,7 @@ var falseButton = document.getElementById("falseButton");
 btn.addEventListener("click", function() {
 var content = document.getElementById("content");
 var httpReq = new XMLHttpRequest();
-httpReq.open('GET', 'https://opentdb.com/api.php?amount=' + 1 + '&category=12&difficulty=easy&type=boolean');
-// 1 innebär att en fråga skrivs ut i taget vid tryck på knappen
+httpReq.open('GET', 'https://opentdb.com/api.php?amount=1&category=12&difficulty=easy&type=boolean');
   
 httpReq.onreadystatechange = function() {
 // Kolla om begärat kommit fram och fått svar
@@ -33,6 +35,7 @@ httpReq.onreadystatechange = function() {
                 // Behåll knapparna synliga tills dess att de trycks på
                 trueButton.style.visibility = "visible";
                 falseButton.style.visibility = "visible";
+                printAnswer.style.visibility = "hidden";
                 document.getElementById(quiz.id).innerHTML = quizContent; // Hämtar quizets id och skriver ut med egenskapen innerHTML
             });
           }
@@ -45,36 +48,46 @@ httpReq.onreadystatechange = function() {
     content.addEventListener('click', function(e) { 
         if (e.target.id == "trueButton") { // Eventlistener för true-knappen
             if (correctAnswer == "True") {
-                alert("Correct!");
-                console.log(userCorrect);
+                printAnswer.innerHTML = "Correct!";
+                hideButtons();
+                console.log(correctAnswer);
                 userCorrect++; // Mätare ökar om användaren svarat rätt
+                answeredQuestion++;
             } else {
-                alert("Sorry, that's wrong!");
+                printAnswer.innerHTML = "Incorrect!";
+                answeredQuestion++;
+                hideButtons();
             }
-            if (currentQuestion === 10) { // Quiz stannar efter 10 frågor
-                alert("Your result is: " + userCorrect + " out of " + currentQuestion); // Skriver ut resultat för användaren
-                content.innerHTML = "Thanks for taking my quiz!";
-                setInterval(function(){ location.reload(); }, 5000); // Laddar om quiz automatiskt
-          }
-          // Dölj knapparna efter att användaren svarat på frågan
-          trueButton.style.visibility = "hidden";
-          falseButton.style.visibility = "hidden";
+            if (answeredQuestion === 10) { // Quiz stannar efter 10 frågor
+                displayResult();
+            }    
         }
-
-        else if (e.target.id == "falseButton") { // Eventlistener för false-knappen
-            if (correctAnswer == "False") {
-                alert("Correct!");
-                console.log(userCorrect);
-                userCorrect++;
-            } else {
-                alert("Sorry, that's wrong!");
-              }
-            if (currentQuestion === 10) {
-                alert("Your result is: " + userCorrect + " out of " + currentQuestion);
-                content.innerHTML = "Thanks for taking my quiz!"; 
-                setInterval(function(){ location.reload(); }, 5000); // Laddar om quiz automatiskt
-            }
-            trueButton.style.visibility = "hidden";
-            falseButton.style.visibility = "hidden";
+            if (e.target.id == "falseButton") { // Eventlistener för false-knappen
+                if (correctAnswer == "False") {
+                    printAnswer.innerHTML = "Correct!";
+                    hideButtons();
+                    console.log(correctAnswer);
+                    userCorrect++;
+                    answeredQuestion++;
+            }  else {
+                    printAnswer.innerHTML = "Incorrect!";
+                    answeredQuestion++;
+                    hideButtons();
+            }  
+            if (answeredQuestion === 10) { // Quiz stannar efter 10 frågor
+                displayResult();
+            }    
         }
      });
+
+     // Göm knapparna och visa svar när frågan är besvarad
+     function hideButtons() {
+        trueButton.style.visibility = "hidden";
+        falseButton.style.visibility = "hidden";
+        printAnswer.style.visibility = "visible";
+     }
+
+     function displayResult() {
+        content.innerHTML = "Your result is: " + userCorrect + " out of " + currentQuestion;
+        setInterval(function(){ location.reload(); }, 5000);
+     }
